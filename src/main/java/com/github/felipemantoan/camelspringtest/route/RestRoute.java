@@ -43,7 +43,7 @@ public class RestRoute extends RouteBuilder {
                     .dataType("string")
                 .endParam()
             .bindingMode(RestBindingMode.json)
-            .to("direct:foo");
+            .to("direct:pokemon-info");
     }
     
 }
