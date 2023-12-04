@@ -36,7 +36,7 @@ public class RestRoute extends RouteBuilder {
             .produces(MediaType.APPLICATION_JSON_VALUE)
             .get().id("exposed")
             .bindingMode(RestBindingMode.json)
-            .to("direct://foo");
+            .to("direct:foo");
     }
     
 }
