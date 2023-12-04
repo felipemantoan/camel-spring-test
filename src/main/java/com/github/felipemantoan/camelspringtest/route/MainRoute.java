@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MainRoute extends RouteBuilder{
+public class MainRoute extends RouteBuilder {
 
     private String backend = "https://webhook.site/e8f8f8f4-1c78-46f3-9271-a131e4a9cb77";
 
@@ -38,7 +38,9 @@ public class MainRoute extends RouteBuilder{
             .marshal().json(JsonLibrary.Jackson)
             .multicast().parallelProcessing()
                 .to(backend)
+                .log("${body}")
                 .to(backend)
+                .log("${body}")
             .end()
             .unmarshal().json(JsonLibrary.Jackson)
             .removeHeaders("*")
