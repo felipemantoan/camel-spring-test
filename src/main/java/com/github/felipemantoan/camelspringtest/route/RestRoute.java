@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import static org.apache.camel.model.rest.RestParamType.path;
 
 @Component
 public class RestRoute extends RouteBuilder {
@@ -32,9 +33,15 @@ public class RestRoute extends RouteBuilder {
             .apiProperty("api.title", "User API")
             .apiProperty("api.version", "1.0.0");
 
-        rest("/test").description("User REST service")
+        rest("/pokemon").description("User REST service")
             .produces(MediaType.APPLICATION_JSON_VALUE)
-            .get().id("exposed")
+            .get("/{pokemon}").id("idRoutePokemonInfoByNameRest")
+                .param()
+                    .name("pokemon")
+                    .type(path)
+                    .description("The name of the pokemon")
+                    .dataType("string")
+                .endParam()
             .bindingMode(RestBindingMode.json)
             .to("direct:foo");
     }
