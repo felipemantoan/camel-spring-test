@@ -8,7 +8,7 @@ import org.apache.camel.Processor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class PokemonProcessor implements Processor {
+public class PokemonInfoProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -19,6 +19,10 @@ public class PokemonProcessor implements Processor {
         var locationAreaEncounters = body.get("location_area_encounters");
         var specie = ((HashMap) body.get("species")).get("url");
         
+        exchange.setProperty("id", body.get("id"));
+        exchange.setProperty("name", body.get("name"));
+        exchange.setProperty("height", body.get("height"));
+        exchange.setProperty("weight", body.get("weight"));
         exchange.setProperty("locationAreaEncounters", locationAreaEncounters);
         exchange.setProperty("specie", specie);
 
