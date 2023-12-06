@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.felipemantoan.camelspringtest.processor.PokemonInfoProcessor;
 import com.github.felipemantoan.camelspringtest.processor.PokemonResponseProcessor;
+import com.github.felipemantoan.camelspringtest.processor.InferPokemonProcessor;
 import com.github.felipemantoan.camelspringtest.processor.PokemonAggregationStrategyProcessor;
 
 @Component
@@ -27,12 +28,14 @@ public class PokemonInfoRoute extends RouteBuilder {
             .removeHeaders("*")
             .setHeader(Exchange.HTTP_METHOD, constant("GET"))
             .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
-            .multicast()
-                .timeout(1000L)
+            .multicast(new PokemonAggregationStrategyProcessor())
+                .parallelAggregate()
                 .parallelProcessing()
-                // .toD("${exchangeProperty.locationAreaEncounters}")
-                .toD("${exchangeProperty.specie}")
+                .timeout(1000L)
+                    .toD("${exchangeProperty.locationAreaEncounters}")
+                    .toD("${exchangeProperty.specie}")
             .end()
+            .process(new InferPokemonProcessor())
             .process(new PokemonResponseProcessor())
             .unmarshal().json(JsonLibrary.Jackson)
             .removeHeaders("*");
